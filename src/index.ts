@@ -9,6 +9,25 @@ import logger from "./logger";
 
 dotenv.config();
 
+import express from "express";
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Endpoint para obtener usuarios conectados
+app.get("/usuarios-conectados", (req, res) => {
+  const usuarios = Array.from(activeUsers).map((id) => ({
+    id,
+    alias: userAliases.get(id) || "Anónimo",
+  }));
+  res.json({ usuarios });
+});
+
+// Iniciar el servidor Express
+app.listen(PORT, () => {
+  logger.info(`Servidor Express corriendo en http://localhost:${PORT}`);
+});
+
 const activeUsers = new Set<number>();
 
 const aliases = [
